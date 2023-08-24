@@ -75,9 +75,9 @@ export default function CustomCalendar() {
   }
 
   return (
-    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex w-full max-w-3xl ">
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex flex-col md:flex-row w-full max-w-3xl">
       {/* Part 1: Calendar */}
-      <div className="flex-none w-1/2 ">
+      <div className="flex-none w-full md:w-1/2 mb-4 md:mb-0">
         <DayPicker
           onDayClick={handleDayClick}
           selected={isDaySelected}
@@ -86,9 +86,9 @@ export default function CustomCalendar() {
           className="border border-gray-300 rounded shadow p-5"
         />
       </div>
-
+  
       {/* Part 2: Data Display */}
-      <div className="flex-grow w-1/2 bg-white p-8  overflow-y-auto max-h-[400px]">
+      <div className="flex-grow w-full md:w-1/2 bg-white p-8 overflow-y-auto max-h-[400px]">
         <h3 className="text-gray-700 border-b pb-2 mb-3">Selected Ranges:</h3>
         <ul className="list-decimal pl-5 mb-5">
           {ranges.map((range, index) => (
@@ -105,10 +105,8 @@ export default function CustomCalendar() {
             </li>
           ))}
         </ul>
-
-        <h3 className="text-gray-700 border-b pb-2 mb-3 mt-5">
-          Individual Dates:
-        </h3>
+  
+        <h3 className="text-gray-700 border-b pb-2 mb-3 mt-5">Individual Dates:</h3>
         <ul className="list-decimal pl-5">
           {selectedDays.map((date, index) => (
             <li
@@ -124,4 +122,5 @@ export default function CustomCalendar() {
       </div>
     </div>
   );
+  
 }
