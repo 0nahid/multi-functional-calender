@@ -67,48 +67,61 @@ export default function CustomCalendar() {
     setRanges((prev) => prev.filter((_, i) => i !== index));
   };
 
-  let footer = <p>Please click twice for individual dates or pick for a range.</p>;
+  let footer = (
+    <p>Please click twice for individual dates or pick for a range.</p>
+  );
   if (selectedDays.length > 0) {
     footer = <p>You selected {selectedDays.length} individual dates.</p>;
   }
 
   return (
-    <>
-        
-      <DayPicker
-        onDayClick={handleDayClick}
-        selected={isDaySelected}
-        footer={footer}
-        showOutsideDays
-      />
-      <div style={{ marginTop: "20px" }}>
-        <h3>Selected Ranges:</h3>
-        <ul>
+    <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex w-full max-w-3xl ">
+      {/* Part 1: Calendar */}
+      <div className="flex-none w-1/2 ">
+        <DayPicker
+          onDayClick={handleDayClick}
+          selected={isDaySelected}
+          footer={footer}
+          showOutsideDays
+          className="border border-gray-300 rounded shadow p-5"
+        />
+      </div>
+
+      {/* Part 2: Data Display */}
+      <div className="flex-grow w-1/2 bg-white p-8  overflow-y-auto max-h-[400px]">
+        <h3 className="text-gray-700 border-b pb-2 mb-3">Selected Ranges:</h3>
+        <ul className="list-decimal pl-5 mb-5">
           {ranges.map((range, index) => (
             <li
               key={index}
               onClick={() => deselectRange(index)}
-              style={{ cursor: "pointer" }}
+              className="mb-2 p-2 bg-gray-200 rounded cursor-pointer hover:bg-gray-300 flex justify-between"
             >
-              {range.from.toLocaleDateString()} -{" "}
-              {range.to.toLocaleDateString()}
+              <span>
+                {range.from.toLocaleDateString()} -{" "}
+                {range.to.toLocaleDateString()}
+              </span>
+              <span className="text-red-500 ml-2">X</span>
             </li>
           ))}
         </ul>
 
-        <h3>Individual Dates:</h3>
-        <ul>
+        <h3 className="text-gray-700 border-b pb-2 mb-3 mt-5">
+          Individual Dates:
+        </h3>
+        <ul className="list-decimal pl-5">
           {selectedDays.map((date, index) => (
             <li
               key={index}
               onClick={() => deselectIndividualDate(date)}
-              style={{ cursor: "pointer" }}
+              className="mb-2 p-2 bg-gray-200 rounded cursor-pointer hover:bg-gray-300 flex justify-between"
             >
-              {date.toLocaleDateString()}
+              <span>{date.toLocaleDateString()}</span>
+              <span className="text-red-500 ml-2">X</span>
             </li>
           ))}
         </ul>
       </div>
-    </>
+    </div>
   );
 }
