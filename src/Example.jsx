@@ -8,8 +8,6 @@ export default function CustomCalendar() {
   const [rangeStart, setRangeStart] = useState(null);
 
   const handleDayClick = (day, { selected }) => {
-    if (isDateUnavailable(day) || !isDateAvailable(day)) return; // If day is unavailable or not available, return
-
     if (rangeStart) {
       if (isSameDay(rangeStart, day) || isDateDisabled(day)) {
         if (!selected) {
@@ -66,70 +64,27 @@ export default function CustomCalendar() {
   };
 
   const jsonData = {
-    availableDates: [
-      "2023-08-15",
-      "2023-08-16",
-      "2023-08-17",
-      "2023-08-18",
-      "2023-08-20",
-      "2023-08-21",
-      "2023-08-22",
-      "2023-08-24",
-      "2023-08-25",
-      "2023-08-30",
-      "2023-09-01",
-      "2023-09-02",
-      "2023-09-03",
-      "2023-09-04",
-      "2023-09-05",
-      "2023-09-06",
-      "2023-09-07",
-    ],
-    unavailableDates: ["2023-08-26", "2023-08-27", "2023-08-28"],
+    unavailableDates: ["2023-08-26", "2023-08-27", "2023-08-28", "2023-08-29"],
   };
 
-  const [availableDates, setAvailableDates] = useState([]);
   const [unavailableDates, setUnavailableDates] = useState([]);
 
   useEffect(() => {
-    const convertedAvailableDates = jsonData.availableDates.map(
+    const convertedDates = jsonData.unavailableDates.map(
       (dateStr) => new Date(dateStr)
     );
-    const convertedUnavailableDates = jsonData.unavailableDates.map(
-      (dateStr) => new Date(dateStr)
-    );
-    setAvailableDates(convertedAvailableDates);
-    setUnavailableDates(convertedUnavailableDates);
+    setUnavailableDates(convertedDates);
   }, []);
-  const isDateAvailable = (date) => {
-    return availableDates.some((availableDate) =>
-      isSameDay(availableDate, date)
-    );
-  };
-
-  const isDateUnavailable = (date) => {
-    return unavailableDates.some((unavailableDate) =>
-      isSameDay(unavailableDate, date)
-    );
-  };
 
   const isRangeIncludingDisabledDates = ({ from, to }) => {
-    let date = new Date(from);
-    while (date <= to) {
-      if (!isDateAvailable(date) || isDateUnavailable(date)) {
-        return true;
-      }
-      date.setDate(date.getDate() + 1);
-    }
-    return false;
+    return unavailableDates.some(
+      (disabledDate) =>
+        disabledDate.getTime() >= from.getTime() &&
+        disabledDate.getTime() <= to.getTime()
+    );
   };
 
   const isDateDisabled = (date) => {
-    return unavailableDates.some((disabledDate) =>
-      isSameDay(disabledDate, date)
-    );
-  };
-  const isDateExplicitlyUnavailable = (date) => {
     return unavailableDates.some((disabledDate) =>
       isSameDay(disabledDate, date)
     );
@@ -152,23 +107,17 @@ export default function CustomCalendar() {
         <DayPicker
           onDayClick={handleDayClick}
           selected={isDaySelected}
-          disabled={(day) =>
-            isDateExplicitlyUnavailable(day) || !isDateAvailable(day)
-          }
+          disabled={unavailableDates}
           footer={footer}
           showOutsideDays
           className="border border-gray-300 rounded shadow p-5"
           modifiers={{
-            available: availableDates,
-            unavailable: unavailableDates,
+            disabled: unavailableDates,
             selected: selectedDays,
             ranges: ranges,
           }}
           modifiersStyles={{
-            available: {
-              color: "green",
-            },
-            unavailable: {
+            disabled: {
               color: "red",
             },
             selected: {
