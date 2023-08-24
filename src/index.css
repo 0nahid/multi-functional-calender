@@ -1,3 +1,13 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.redDisabled {
+    color: white !important;
+}
+
+.goldSelected {
+    background-color: #C6A34F !important;
+    color: white !important;
+}
+    
