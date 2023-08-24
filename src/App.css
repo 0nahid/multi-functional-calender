@@ -1,0 +1,10 @@
+/* Override the default selected day style */
+.DayPicker-Day--selected {
+  background-color: #C6a34f !important;
+  color: white; /* You can adjust the text color if needed */
+}
+/* Increase specificity to ensure the styles are applied */
+.DayPicker .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+  background-color: #C6a34f !important;
+  color: white !important; /* Adjust text color if needed */
+}
